@@ -6,6 +6,7 @@ type PostCardProps = {
   description: string;
 };
 
+
 export default function PostCard({ id, title, description }: PostCardProps) {
   return (
     <Link href={`/posts/${id}`}>
