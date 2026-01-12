@@ -3,12 +3,12 @@ import BlogCard from "./components/BlogCard";
 
 export default function HomePage() {
   return (
-    <main className="max-w-5xl mx-outo px-4 py-10">
+    <main className="max-w-5xl mx-auto px-4 py-10">
       <h1 className="text-3xl font-bold mb-6">Blog</h1>
 
       <div className="grid gap-6">
 
-      {blogs.map ((blog) => (
+      {blogs.map((blog) => (
 
         <BlogCard
         key={blog.slug}

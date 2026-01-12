@@ -14,7 +14,7 @@ export default function BlogCard({
   image,
 }: BlogCardProps) {
   return (
-    <Link href={`/posts/${slug}`}>
+    <Link href={`/blogs/${slug}`}>
       <div className="border rounded-xl overflow-hidden shadow hover:shadow-lg transition cursor-pointer bg-white">
         <img
           src={image}
