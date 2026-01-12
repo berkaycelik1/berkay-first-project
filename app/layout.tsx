@@ -11,7 +11,7 @@ export default function RootLayout({
         <body>
           <nav className="border-b bg-white sticky top-0 z-50">
             <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
-              <Link href="/" className="text-xl font-bold text-blue-600">
+              <Link href="/" className="text-2xl font-black text-slate-600">
               Berkay'ın Blogu
               </Link>
               <div className="space-x-6 font-medium text-gray-600">
