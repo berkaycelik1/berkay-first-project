@@ -15,7 +15,7 @@ export default function BlogCard({
 }: BlogCardProps) {
   return (
     <Link href={`/blogs/${slug}`}>
-      <div className="border rounded-xl overflow-hidden shadow hover:shadow-lg transition cursor-pointer bg-white">
+      <div className="bg-white dark:bg-slate-800 border dark:border-slate-700 rounded-xl overflow-hidden shadow-md transition-colors">
         <img
           src={image}
           alt={title}
