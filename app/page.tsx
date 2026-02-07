@@ -1,9 +1,46 @@
-import { BLOG_POSTS } from "./data/post";
+'use client';
+
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import Link from "next/link";
 
+interface BLOG_POSTS {
+  id: number;
+  title: string;
+  content: string;
+  date?: string;
+  category?: string;
+}
+
 export default function Home() {
+  const [posts, setPosts]= useState<BLOG_POSTS[]>([]);
+  const [loading, setLoading]= useState(true);
+  
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+      const response = await axios.get('http://localhost:5001/posts');
+      setPosts(response.data);
+      setLoading(false);
+    } catch (error) {
+      console.error("Veri çekilemedi:", error);
+      setLoading(false);
+    }
+    };
+    fetchPosts();
+  }, []);
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+      <div className="text-xl font-bold text-blue-600 animate-pulse">
+      Yazılar mutfaktan getiriliyor...
+      </div>
+      </div>
+    );
+  }
+
   return (
-    // Tüm sayfa bu ana <div> içinde olmalı
+
     <div className="space-y-10">
 
       {/* 1. BÖLÜM: BAŞLIK */}
@@ -39,10 +76,10 @@ export default function Home() {
       </div>
 
       {/* 3. BÖLÜM: BLOG KARTLARI (DİNAMİK) */}
-      {/* Grid yapısını burada kuruyoruz ki kartlar yan yana düzgün dizilsin */}
+      
       <div className="grid gap-8 md:grid-cols-2">
-        {BLOG_POSTS.map((post) => (
-          <Link href={`/blog/${post.slug}`} key={post.slug} className="group">
+        {posts.map((post) => (
+          <Link href={`/blog/${post.id}`} key={post.id} className="group">
             <article className="h-full p-6 rounded-2xl border border-slate-200 bg-white hover:border-blue-300 hover:shadow-xl transition-all duration-300 dark:bg-slate-800/50 dark:border-slate-800 dark:hover:border-blue-500/30">
               
               <div className="flex items-center gap-2 mb-3">
@@ -57,7 +94,7 @@ export default function Home() {
               </h2>
 
               <p className="text-slate-600 dark:text-slate-400 mt-3 leading-relaxed">
-                {post.summary}
+                {post.content}
               </p>
 
               <div className="mt-6 flex items-center text-blue-600 font-semibold group-hover:gap-2 transition-all">
@@ -68,6 +105,6 @@ export default function Home() {
         ))}
       </div>
 
-    </div> // Ana div burada biter
-  ); // Return burada biter
-} // Fonksiyon burada biter
+    </div>
+  ); 
+} 
