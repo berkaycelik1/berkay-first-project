@@ -1,5 +1,5 @@
 'use client';
-
+import Chat from "./components/Chat";
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Link from "next/link";
@@ -20,7 +20,7 @@ export default function Home() {
     const fetchPosts = async () => {
       try {
       const response = await axios.get('http://localhost:5001/posts');
-      setPosts(response.data);
+      setPosts(response.data.data);
       setLoading(false);
     } catch (error) {
       console.error("Veri çekilemedi:", error);
