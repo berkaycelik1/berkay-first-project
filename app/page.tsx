@@ -40,8 +40,9 @@ export default function Home() {
   }
 
   return (
-
+    
     <div className="space-y-10">
+      <Chat />
 
       {/* 1. BÖLÜM: BAŞLIK */}
       <section className="space-y-2">
