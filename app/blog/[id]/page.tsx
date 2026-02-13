@@ -19,7 +19,7 @@ export default function BlogDetailPage() {
 
     axios.get(`http://localhost:5001/posts/${id}`)
       .then((response) => {
-        setBlog(response.data);
+        setBlog(response.data.data);
         setLoading(false);
       })
       .catch((error) => {
