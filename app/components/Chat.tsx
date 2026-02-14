@@ -3,9 +3,7 @@
 import React, { useEffect, useState } from "react";
 import io from "socket.io-client";
 
-const socket = io("http://localhost:5001", {
-  transports: ["websocket"],
-});
+let socket: any;
 
 // Mesaj Tipi 
 type Message = {
@@ -20,6 +18,9 @@ const Chat = () => {
   const [mesajListesi, setMesajListesi] = useState<Message[]>([]);
 
   useEffect(() => {
+    socket = io("http://localhost:5001", {
+      transports: ["websocket"],
+    });
     socket.on("connect", () => {
       setBaglantiDurumu(true);
     });
@@ -27,19 +28,25 @@ const Chat = () => {
     socket.on("disconnect", () => {
       setBaglantiDurumu(false);
     });
-
+    socket.on("load_messages", (eskiMesajlar: any[]) => {
+      console.log("📤 Kargo Geldi! Mesajlar:", eskiMesajlar);
+      setMesajListesi(eskiMesajlar);
+    });
+    
     // Santralden gelen mesajı dinle
     socket.on("receive_message", (data: Message) => {
       setMesajListesi((eskiler) => [...eskiler, data]);
     });
 
     return () => {
+      socket.disconnect();
       socket.off("connect");
       socket.off("disconnect");
+      socket.off("load_messages");
       socket.off("receive_message");
     };
-  }, []);
-
+    
+}, []);
   // Mesaj Gönderme Fonksiyonu
   const mesajGonder = () => {
     if (mesaj.trim() !== "") {
@@ -49,7 +56,6 @@ const Chat = () => {
         time: new Date().toLocaleTimeString(),
       };
 
-      
       socket.emit("send_message", mesajVerisi);
       setMesaj(""); // Kutuyu temizle
     }
