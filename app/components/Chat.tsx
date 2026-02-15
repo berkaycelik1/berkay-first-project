@@ -10,12 +10,16 @@ type Message = {
   text: string;
   sender: string;
   time: string;
+  roomId: string;
 };
 
 const Chat = () => {
   const [baglantiDurumu, setBaglantiDurumu] = useState(false);
   const [mesaj, setMesaj] = useState("");
   const [mesajListesi, setMesajListesi] = useState<Message[]>([]);
+  const [kullaniciAdi, setKullaniciAdi] = useState("");
+  const [oda, setOda] = useState("");
+  const [odaGirisYapti, setOdaGirisYapti] = useState(false);
 
   useEffect(() => {
     socket = io("http://localhost:5001", {
@@ -45,23 +49,52 @@ const Chat = () => {
       socket.off("load_messages");
       socket.off("receive_message");
     };
-    
 }, []);
+
+  const odayaKatil = () => {
+    if (kullaniciAdi !=="" && oda !=="") {
+      socket.emit("join_room", oda);
+      setOdaGirisYapti(true);
+    }
+  };
   // Mesaj Gönderme Fonksiyonu
   const mesajGonder = () => {
     if (mesaj.trim() !== "") {
-      const mesajVerisi = {
+  const mesajVerisi = {
         text: mesaj,
-        sender: "Ben", // İlerde buraya kullanıcı adı gelecek
+        sender: kullaniciAdi,
+        roomId: oda,
         time: new Date().toLocaleTimeString(),
       };
 
       socket.emit("send_message", mesajVerisi);
-      setMesaj(""); // Kutuyu temizle
+      setMesaj("");
     }
   };
 
   return (
+    !odaGirisYapti? (
+      <div className="flex flex-col gap-4 p-4 max-w-md mx-auto mt-10 border rounded-lg shadow-lg bg-white dark:bg-slate-800">
+        <h2 className="text-2xl font-bold text-center">Sohbet Girişi</h2>
+        <input 
+        type="text"
+        placeholder="Adınız..."
+        className="p-2 border rounded text-black"
+        onChange={(e) => setKullaniciAdi(e.target.value)}
+        />
+        <input
+         type="text" 
+         placeholder="Oda Adı (Örn: yazilim)"
+         className="p-2 border rounded text-black"
+         onChange={(e) => setOda(e.target.value)}
+         />
+         <button
+         onClick={odayaKatil}
+         className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700">
+          Odaya Katıl
+         </button>
+      </div>
+    ) : (
     <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-slate-800/50 mb-8 max-w-md mx-auto shadow-lg">
       
       {/* Üst Kısım */}
@@ -105,6 +138,7 @@ const Chat = () => {
         </button>
       </div>
     </div>
+    )
   );
 };
 
