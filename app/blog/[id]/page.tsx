@@ -19,7 +19,7 @@ export default function BlogDetailPage() {
 
     axios.get(`http://localhost:5001/posts/${id}`)
       .then((response) => {
-        setBlog(response.data);
+        setBlog(response.data.data);
         setLoading(false);
       })
       .catch((error) => {
@@ -48,6 +48,7 @@ export default function BlogDetailPage() {
 
   // 6. Başarılı Ekran (Senin tasarımın korundu)
   return (
+    
     <main className="max-w-3xl mx-auto px-4 py-10">
       
       <Link href="/" className="text-blue-500 hover:underline mb-4 inline-block font-medium">
